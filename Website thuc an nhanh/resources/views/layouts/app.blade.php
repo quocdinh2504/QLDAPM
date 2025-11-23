@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'FastFood') }}</title>
+    <title>Trang quản trị - {{ config('app.name', 'FastFood') }}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -21,7 +21,7 @@
     <div class="container-fluid">
         <nav class="navbar navbar-expand-md navbar-light shadow-sm bg-warning">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('frontend') }}">
+                <a class="navbar-brand" href="{{ route('admin.home') }}">
                     <i class="fa-solid fa-burger"></i> {{ config('app.name', 'FastFood') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -31,25 +31,25 @@
                     <!-- Left side of Navbar -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+                            <a class="nav-link" href="{{ route('admin.admin_dashboard.dashboard') }}"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('loaisanpham') }}"><i class="fa-solid fa-layer-group"></i> Loại món ăn</a>
+                            <a class="nav-link" href="{{ route('admin.loaisanpham') }}"><i class="fa-solid fa-layer-group"></i> Loại món ăn</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('hangsanxuat') }}"><i class="fa-solid fa-boxes-packing"></i> Nhà cung cấp</a>
+                            <a class="nav-link" href="{{ route('admin.hangsanxuat') }}"><i class="fa-solid fa-boxes-packing"></i> Nhà cung cấp</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('sanpham') }}"><i class="fa-solid fa-utensils"></i> Món ăn</a>
+                            <a class="nav-link" href="{{ route('admin.sanpham') }}"><i class="fa-solid fa-utensils"></i> Món ăn</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('tinhtrang') }}"><i class="fa-solid fa-truck"></i> Tình trạng đơn</a>
+                            <a class="nav-link" href="{{ route('admin.tinhtrang') }}"><i class="fa-solid fa-truck"></i> Tình trạng đơn</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('donhang') }}"><i class="fa-solid fa-box"></i> Đơn hàng</a>
+                            <a class="nav-link" href="{{ route('admin.donhang') }}"><i class="fa-solid fa-box"></i> Đơn hàng</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('nguoidung') }}"><i class="fa-solid fa-user-gear"></i> Tài khoản</a>
+                            <a class="nav-link" href="{{ route('admin.nguoidung') }}"><i class="fa-solid fa-user-gear"></i> Tài khoản</a>
                         </li>
                     </ul>
                     <!-- Right side of Navbar -->
