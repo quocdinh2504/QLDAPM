@@ -8,6 +8,7 @@ use App\Http\Controllers\SanPhamController;
 use App\Http\Controllers\TinhTrangController;
 use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -61,3 +62,5 @@ Route::post('/nguoidung/them', [UserController::class, 'postThem'])->name('nguoi
 Route::get('/nguoidung/sua/{id}', [UserController::class, 'getSua'])->name('nguoidung.sua');
 Route::post('/nguoidung/sua/{id}', [UserController::class, 'postSua'])->name('nguoidung.sua');
 Route::get('/nguoidung/xoa/{id}', [UserController::class, 'getXoa'])->name('nguoidung.xoa');
+// Route cho Dashboard
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
