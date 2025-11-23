@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str; // Để tạo tên file chuẩn (slug)
 use Illuminate\Support\Facades\Storage; // Để lưu/xóa file
 use Illuminate\Support\Facades\File; // Hỗ trợ thêm các thao tác file
+use App\Imports\HangSanXuatImport;
+use App\Exports\HangSanXuatExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HangSanXuatController extends Controller
 {
@@ -97,5 +100,21 @@ class HangSanXuatController extends Controller
         if(!empty($orm->hinhanh)) Storage::delete($orm->hinhanh);
        
         return redirect()->route('hangsanxuat');
+    }
+
+    // Nhập từ Excel
+    public function postNhap(Request $request)
+    {
+        $request->validate([
+            'file_excel' => ['required', 'file', 'mimes:xls,xlsx', 'max:2048']
+        ]);
+        Excel::import(new HangSanXuatImport, $request->file('file_excel'));
+        return redirect()->route('hangsanxuat');
+    }
+
+    // Xuất ra Excel
+    public function getXuat()
+    {
+    return Excel::download(new HangSanXuatExport, 'danh-sach-hang-san-xuat.xlsx');
     }
 }
