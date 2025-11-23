@@ -10,6 +10,17 @@ class SanPham extends Model
 {
     protected $table = 'sanpham';
 
+    protected $fillable = [
+        'loaisanpham_id',
+        'hangsanxuat_id',
+        'tensanpham',
+        'tensanpham_slug',
+        'soluong',
+        'dongia',
+        'hinhanh',
+        'motasanpham',
+        ];
+
     // Quan hệ: Sản phẩm thuộc về 1 Loại sản phẩm
     public function LoaiSanPham(): BelongsTo
     {
