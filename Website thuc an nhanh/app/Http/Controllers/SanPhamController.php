@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str; // Để tạo tên file chuẩn (slug)
 use Illuminate\Support\Facades\Storage; // Để lưu/xóa file
 use Illuminate\Support\Facades\File; // Hỗ trợ thêm các thao tác file
+use App\Imports\SanPhamImport;
+use App\Exports\SanPhamExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SanPhamController extends Controller
 {
@@ -131,5 +134,18 @@ class SanPhamController extends Controller
 
         // Sau khi xóa thành công thì tự động chuyển về trang danh sách
         return redirect()->route('sanpham');
+    }
+
+    // Nhập từ Excel
+    public function postNhap(Request $request)
+    {
+        Excel::import(new SanPhamImport, $request->file('file_excel'));
+        return redirect()->route('sanpham');
+    }
+
+    // Xuất ra Excel
+    public function getXuat()
+    {
+        return Excel::download(new SanPhamExport, 'danh-sach-san-pham.xlsx');
     }
 }

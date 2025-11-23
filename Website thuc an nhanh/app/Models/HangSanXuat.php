@@ -9,6 +9,13 @@ class HangSanXuat extends Model
 {
     protected $table = 'hangsanxuat';
 
+    protected $fillable = [
+        'id',
+        'tenhang',
+        'tenhang_slug',
+        'hinhanh',
+    ];
+
     // Quan hệ: Một hãng sản xuất có nhiều sản phẩm
     public function SanPham(): HasMany
     {
