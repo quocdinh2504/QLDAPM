@@ -15,8 +15,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Hình ảnh</label>
-                        <input type="file" class="form-control" name="hinhanh" />
+                        <label class="form-label" for="hinhanh">Hình ảnh</label>
+                        <input type="file" class="form-control @error('hinhanh') is-invalid @enderror" id="hinhanh" name="hinhanh" />
                         @error('hinhanh')
                             <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
                         @enderror
