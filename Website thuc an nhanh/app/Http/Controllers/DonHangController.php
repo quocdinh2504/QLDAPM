@@ -14,14 +14,14 @@ class DonHangController extends Controller
     {
         // Lấy đơn mới nhất lên đầu
         $donhang = DonHang::orderBy('created_at', 'desc')->get();
-        return view('donhang.danhsach', compact('donhang'));
+        return view('admin.donhang.danhsach', compact('donhang'));
     }
 
     // 2. Thêm đơn hàng (Thường khách hàng đặt từ Frontend, Admin ít khi nhập tay)
     public function getThem()
     {
         // Có thể để trống hoặc redirect về danh sách
-        return redirect()->route('donhang');
+        return redirect()->route('admin.donhang');
     }
 
     public function postThem(Request $request)
@@ -34,7 +34,7 @@ class DonHangController extends Controller
     {
         $donhang = DonHang::find($id);
         $tinhtrang = TinhTrang::all(); // Lấy danh sách trạng thái (Mới, Đang giao...)
-        return view('donhang.sua', compact('donhang', 'tinhtrang'));
+        return view('admin.donhang.sua', compact('donhang', 'tinhtrang'));
     }
 
     public function postSua(Request $request, $id)
@@ -51,7 +51,7 @@ class DonHangController extends Controller
         $orm->diachigiaohang = $request->diachigiaohang;
         $orm->save();
 
-        return redirect()->route('donhang');
+        return redirect()->route('admin.donhang');
     }
 
     // 4. Xóa đơn hàng
@@ -64,6 +64,6 @@ class DonHangController extends Controller
         $orm = DonHang::find($id);
         $orm->delete();
 
-        return redirect()->route('donhang');
+        return redirect()->route('admin.donhang');
     }
 }

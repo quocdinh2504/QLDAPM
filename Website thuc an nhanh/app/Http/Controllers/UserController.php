@@ -12,12 +12,12 @@ class UserController extends Controller
     public function getDanhSach()
     {
         $nguoidung = User::all();
-        return view('nguoidung.danhsach', compact('nguoidung'));
+        return view('admin.nguoidung.danhsach', compact('nguoidung'));
     }
 
     public function getThem()
     {
-        return view('nguoidung.them');
+        return view('admin.nguoidung.them');
     }
 
     public function postThem(Request $request)
@@ -37,13 +37,13 @@ class UserController extends Controller
         $orm->role = $request->role;
         $orm->save();
 
-        return redirect()->route('nguoidung');
+        return redirect()->route('admin.nguoidung');
     }
 
     public function getSua($id)
     {
         $nguoidung = User::find($id);
-        return view('nguoidung.sua', compact('nguoidung'));
+        return view('admin.nguoidung.sua', compact('nguoidung'));
     }
 
     public function postSua(Request $request, $id)
@@ -68,13 +68,13 @@ class UserController extends Controller
         
         $orm->save();
 
-        return redirect()->route('nguoidung');
+        return redirect()->route('admin.nguoidung');
     }
 
     public function getXoa($id)
     {
         $orm = User::find($id);
         $orm->delete();
-        return redirect()->route('nguoidung');
+        return redirect()->route('admin.nguoidung');
     }
 }

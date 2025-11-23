@@ -16,12 +16,12 @@ class HangSanXuatController extends Controller
     public function getDanhSach()
     {
         $hangsanxuat = HangSanXuat::all();
-        return view('hangsanxuat.danhsach', compact('hangsanxuat'));
+        return view('admin.hangsanxuat.danhsach', compact('hangsanxuat'));
     }
 
     public function getThem()
     {
-        return view('hangsanxuat.them');
+        return view('admin.hangsanxuat.them');
     }
 
     public function postThem(Request $request)
@@ -48,14 +48,14 @@ class HangSanXuatController extends Controller
         $orm->save();
 
         // Sau khi thêm thành công thì tự động chuyển về trang danh sách
-        return redirect()->route('hangsanxuat');
+        return redirect()->route('admin.hangsanxuat');
 
     }
 
     public function getSua($id)
     {
         $hangsanxuat = HangSanXuat::find($id);
-        return view('hangsanxuat.sua', compact('hangsanxuat'));
+        return view('admin.hangsanxuat.sua', compact('hangsanxuat'));
     }
 
     public function postSua(Request $request, $id)
@@ -87,7 +87,7 @@ class HangSanXuatController extends Controller
         $orm->save();
 
         // Sau khi sửa thành công thì tự động chuyển về trang danh sách
-        return redirect()->route('hangsanxuat');
+        return redirect()->route('admin.hangsanxuat');
 
     }
 
@@ -99,7 +99,7 @@ class HangSanXuatController extends Controller
         // Xoá hình ảnh khi xóa dữ liệu
         if(!empty($orm->hinhanh)) Storage::delete($orm->hinhanh);
        
-        return redirect()->route('hangsanxuat');
+        return redirect()->route('admin.hangsanxuat');
     }
 
     // Nhập từ Excel
@@ -109,7 +109,7 @@ class HangSanXuatController extends Controller
             'file_excel' => ['required', 'file', 'mimes:xls,xlsx', 'max:2048']
         ]);
         Excel::import(new HangSanXuatImport, $request->file('file_excel'));
-        return redirect()->route('hangsanxuat');
+        return redirect()->route('admin.hangsanxuat');
     }
 
     // Xuất ra Excel

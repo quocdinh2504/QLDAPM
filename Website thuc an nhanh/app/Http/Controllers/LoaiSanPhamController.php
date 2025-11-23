@@ -12,13 +12,13 @@ class LoaiSanPhamController extends Controller
     public function getDanhSach()
     {
         $loaisanpham = LoaiSanPham::all(); // Lấy tất cả dữ liệu từ CSDL
-        return view('loaisanpham.danhsach', compact('loaisanpham')); // Trả về View và truyền biến sang
+        return view('admin.loaisanpham.danhsach', compact('loaisanpham')); // Trả về View và truyền biến sang
     }
 
     // 2. Hiện form thêm mới
     public function getThem()
     {
-        return view('loaisanpham.them');
+        return view('admin.loaisanpham.them');
     }
 
     // 3. Xử lý thêm mới vào CSDL
@@ -34,14 +34,14 @@ class LoaiSanPhamController extends Controller
         $orm->tenloai_slug = Str::slug($request->tenloai, '-'); // Tạo slug: "Gà Rán" -> "ga-ran"
         $orm->save(); // Lưu vào CSDL
 
-        return redirect()->route('loaisanpham'); // Quay về trang danh sách
+        return redirect()->route('admin.loaisanpham'); // Quay về trang danh sách
     }
 
     // 4. Hiện form sửa
     public function getSua($id)
     {
         $loaisanpham = LoaiSanPham::find($id); // Tìm loại sản phẩm theo ID
-        return view('loaisanpham.sua', compact('loaisanpham'));
+        return view('admin.loaisanpham.sua', compact('loaisanpham'));
     }
 
     // 5. Xử lý cập nhật
@@ -56,7 +56,7 @@ class LoaiSanPhamController extends Controller
         $orm->tenloai_slug = Str::slug($request->tenloai, '-');
         $orm->save();
 
-        return redirect()->route('loaisanpham');
+        return redirect()->route('admin.loaisanpham');
     }
 
     // 6. Xử lý xóa
@@ -65,6 +65,6 @@ class LoaiSanPhamController extends Controller
         $orm = LoaiSanPham::find($id);
         $orm->delete();
 
-        return redirect()->route('loaisanpham');
+        return redirect()->route('admin.loaisanpham');
     }
 }

@@ -17,7 +17,7 @@ class SanPhamController extends Controller
     public function getDanhSach()
     {
         $sanpham = SanPham::all();
-        return view('sanpham.danhsach', compact('sanpham'));
+        return view('admin.sanpham.danhsach', compact('sanpham'));
     }
 
     public function getThem()
@@ -25,7 +25,7 @@ class SanPhamController extends Controller
         $loaisanpham = LoaiSanPham::all();
         $hangsanxuat = HangSanXuat::all();
 
-        return view('sanpham.them', compact('loaisanpham', 'hangsanxuat'));
+        return view('admin.sanpham.them', compact('loaisanpham', 'hangsanxuat'));
     }
 
     public function postThem(Request $request)
@@ -68,7 +68,7 @@ class SanPhamController extends Controller
         $orm->save();
 
         // Sau khi thêm thành công thì tự động chuyển về trang danh sách
-        return redirect()->route('sanpham');
+        return redirect()->route('admin.sanpham');
     }
 
     public function getSua($id)
@@ -77,7 +77,7 @@ class SanPhamController extends Controller
         $loaisanpham = LoaiSanPham::all();
         $hangsanxuat = HangSanXuat::all();
 
-        return view('sanpham.sua', compact('sanpham', 'loaisanpham', 'hangsanxuat'));
+        return view('admin.sanpham.sua', compact('sanpham', 'loaisanpham', 'hangsanxuat'));
     }
 
     public function postSua(Request $request, $id)
@@ -121,7 +121,7 @@ class SanPhamController extends Controller
         $orm->save();
 
         // Sau khi sửa thành công thì tự động chuyển về trang danh sách
-        return redirect()->route('sanpham');
+        return redirect()->route('admin.sanpham');
     }
 
     public function getXoa($id)
@@ -133,14 +133,14 @@ class SanPhamController extends Controller
         if(!empty($orm->hinhanh)) Storage::delete($orm->hinhanh);
 
         // Sau khi xóa thành công thì tự động chuyển về trang danh sách
-        return redirect()->route('sanpham');
+        return redirect()->route('admin.sanpham');
     }
 
     // Nhập từ Excel
     public function postNhap(Request $request)
     {
         Excel::import(new SanPhamImport, $request->file('file_excel'));
-        return redirect()->route('sanpham');
+        return redirect()->route('admin.sanpham');
     }
 
     // Xuất ra Excel
