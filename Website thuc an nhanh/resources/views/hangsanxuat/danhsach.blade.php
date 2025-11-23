@@ -21,11 +21,7 @@
                         @foreach ($hangsanxuat as $value)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td class="text-center">
-                                    @if(!empty($value->hinhanh))
-                                        <img src="{{ asset('storage/' . $value->hinhanh) }}" width="50" />
-                                    @endif
-                                </td>
+                                <td class="text-center"><img src="{{ asset('storage/app/private/'. $value->hinhanh) }}" width="100" class="img-thumbnail" /></td>
                                 <td>{{ $value->tenhang }}</td>
                                 <td>{{ $value->tenhang_slug }}</td>
                                 <td class="text-center"><a href="{{ route('hangsanxuat.sua', ['id' => $value->id]) }}"><i class="fa-solid fa-pen-to-square text-warning"></i></a></td>

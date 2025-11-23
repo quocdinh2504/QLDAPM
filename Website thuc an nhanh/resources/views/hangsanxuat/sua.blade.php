@@ -11,13 +11,19 @@
                         <input type="text" class="form-control @error('tenhang') is-invalid @enderror" name="tenhang" value="{{ $hangsanxuat->tenhang }}" required />
                         @error('tenhang') <div class="invalid-feedback"><strong>{{ $message }}</strong></div> @enderror
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label">Hình ảnh</label>
+                        <label class="form-label" for="hinhanh">Hình ảnh</label>
                         @if(!empty($hangsanxuat->hinhanh))
-                            <img src="{{ asset('storage/' . $hangsanxuat->hinhanh) }}" width="50" class="d-block mb-2" />
+                            <img class="d-block rounded img-thumbnail" src="{{ asset('storage/app/private/'. $hangsanxuat->hinhanh) }}" width="100" />
+                            <span class="d-block small text-danger">Bỏ trống nếu muốn giữ nguyên ảnh cũ.</span>
                         @endif
-                        <input type="file" class="form-control" name="hinhanh" />
+                            <input type="file" class="form-control @error('hinhanh') is-invalid @enderror" id="hinhanh" name="hinhanh" />
+                        @error('hinhanh')
+                            <div class="invalid-feedback"><strong>{{ $message }}</strong></div>
+                        @enderror
                     </div>
+                    
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </form>
             </div>
