@@ -31,6 +31,9 @@
                     <!-- Left side of Navbar -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('loaisanpham') }}"><i class="fa-solid fa-layer-group"></i> Loại món ăn</a>
                         </li>
                         <li class="nav-item">
@@ -65,11 +68,11 @@
                             @else
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#nguoidung" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-light fa-user-circle"></i> {{ Auth::user()->name }}
+                                        <i class="fa-solid fa-user-gear"></i> {{ Auth::user()->name }}
                                     </a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                            <i class="fa-light fa-fw fa-sign-out-alt"></i> Đăng xuất
+                                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất
                                         </a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="post" class="d-none">
                                             @csrf
