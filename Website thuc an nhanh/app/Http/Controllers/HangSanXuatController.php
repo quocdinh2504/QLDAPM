@@ -2,69 +2,76 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HangSanXuat; // Gọi Model HangSanXuat
+use App\Models\HangSanXuat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; // Gọi thư viện xử lý chuỗi (để tạo slug)
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage; // Thêm thư viện xử lý file
 
 class HangSanXuatController extends Controller
 {
-    // 1. Xem danh sách
     public function getDanhSach()
     {
-        $HangSanXuat = HangSanXuat::all(); // Lấy tất cả dữ liệu từ CSDL
-        return view('HangSanXuat.danhsach', compact('HangSanXuat')); // Trả về View và truyền biến sang
+        $hangsanxuat = HangSanXuat::all();
+        return view('hangsanxuat.danhsach', compact('hangsanxuat'));
     }
 
-    // 2. Hiện form thêm mới
     public function getThem()
     {
-        return view('HangSanXuat.them');
+        return view('hangsanxuat.them');
     }
 
-    // 3. Xử lý thêm mới vào CSDL
     public function postThem(Request $request)
     {
-        // Kiểm tra dữ liệu đầu vào (Validation)
         $request->validate([
-            'tenhang' => ['required', 'string', 'max:255', 'unique:HangSanXuat'],
+            'tenhang' => ['required', 'string', 'max:255', 'unique:hangsanxuat'],
+            'hinhanh' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $orm = new HangSanXuat();
         $orm->tenhang = $request->tenhang;
-        $orm->tenhang_slug = Str::slug($request->tenhang, '-'); // Tạo slug: "Gà Rán" -> "ga-ran"
-        $orm->save(); // Lưu vào CSDL
+        $orm->tenhang_slug = Str::slug($request->tenhang, '-');
+        
+        if ($request->hasFile('hinhanh')) {
+            $path = $request->file('hinhanh')->store('hangsanxuat', 'public');
+            $orm->hinhanh = $path;
+        }
 
-        return redirect()->route('HangSanXuat'); // Quay về trang danh sách
+        $orm->save();
+        return redirect()->route('hangsanxuat');
     }
 
-    // 4. Hiện form sửa
     public function getSua($id)
     {
-        $HangSanXuat = HangSanXuat::find($id); // Tìm loại sản phẩm theo ID
-        return view('HangSanXuat.sua', compact('HangSanXuat'));
+        $hangsanxuat = HangSanXuat::find($id);
+        return view('hangsanxuat.sua', compact('hangsanxuat'));
     }
 
-    // 5. Xử lý cập nhật
     public function postSua(Request $request, $id)
     {
         $request->validate([
-            'tenhang' => ['required', 'string', 'max:255', 'unique:HangSanXuat,tenhang,' . $id],
+            'tenhang' => ['required', 'string', 'max:255', 'unique:hangsanxuat,tenhang,' . $id],
+            'hinhanh' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $orm = HangSanXuat::find($id);
         $orm->tenhang = $request->tenhang;
         $orm->tenhang_slug = Str::slug($request->tenhang, '-');
-        $orm->save();
 
-        return redirect()->route('HangSanXuat');
+        if ($request->hasFile('hinhanh')) {
+            if(!empty($orm->hinhanh)) Storage::disk('public')->delete($orm->hinhanh);
+            $path = $request->file('hinhanh')->store('hangsanxuat', 'public');
+            $orm->hinhanh = $path;
+        }
+
+        $orm->save();
+        return redirect()->route('hangsanxuat');
     }
 
-    // 6. Xử lý xóa
     public function getXoa($id)
     {
         $orm = HangSanXuat::find($id);
+        if(!empty($orm->hinhanh)) Storage::disk('public')->delete($orm->hinhanh);
         $orm->delete();
-
-        return redirect()->route('HangSanXuat');
+        return redirect()->route('hangsanxuat');
     }
 }
