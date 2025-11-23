@@ -3,8 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HangSanXuat extends Model
 {
-    //
+    protected $table = 'hangsanxuat';
+
+    // Quan hệ: Một hãng sản xuất có nhiều sản phẩm
+    public function SanPham(): HasMany
+    {
+        return $this->hasMany(SanPham::class, 'hangsanxuat_id', 'id');
+    }
 }
