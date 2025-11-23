@@ -24,11 +24,7 @@
                         @foreach($sanpham as $value)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td class="text-center">
-                                    @if(!empty($value->hinhanh))
-                                        <img src="{{ asset('storage/' . $value->hinhanh) }}" width="80" class="img-thumbnail" />
-                                    @endif
-                                </td>
+                                <td class="text-center"><img src="{{ asset('storage/app/private/'. $value->hinhanh) }}" width="80" class="img-thumbnail" /></td>
                                 <td>{{ $value->LoaiSanPham->tenloai }}</td>
                                 <td>{{ $value->HangSanXuat->tenhang }}</td>
                                 <td>{{ $value->tensanpham }}</td>

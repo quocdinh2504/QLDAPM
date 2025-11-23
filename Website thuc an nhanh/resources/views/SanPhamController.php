@@ -5,7 +5,9 @@ use App\Models\SanPham;
 use App\Models\LoaiSanPham;
 use App\Models\HangSanXuat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Str; // Để tạo tên file chuẩn (slug)
+use Illuminate\Support\Facades\Storage; // Để lưu/xóa file
+use Illuminate\Support\Facades\File; // Hỗ trợ thêm các thao tác file
 
 class SanPhamController extends Controller
 {
@@ -32,8 +34,24 @@ class SanPhamController extends Controller
             'tensanpham' => ['required', 'string', 'max:255', 'unique:sanpham'],
             'soluong' => ['required', 'numeric'],
             'dongia' => ['required', 'numeric'],
-            // 'hinhanh' => ['nullable', 'image', 'max:2048'],
+            'hinhanh' => ['nullable', 'image', 'max:2048'],
         ]);
+
+        // Upload hình ảnh
+        $path = null;
+        if($request->hasFile('hinhanh'))
+        {
+            // Tạo thư mục nếu chưa có
+            $lsp = LoaiSanPham::find($request->loaisanpham_id);
+            Storage::exists($lsp->tenloai_slug) or Storage::makeDirectory($lsp->tenloai_slug, 0775);
+
+            // Xác định tên tập tin
+            $extension = $request->file('hinhanh')->extension();
+            $filename = Str::slug($request->tensanpham, '-') . '.' . $extension;
+
+            // Upload vào thư mục và trả về đường dẫn
+            $path = Storage::putFileAs($lsp->tenloai_slug, $request->file('hinhanh'), $filename);
+        }
 
         $orm = new SanPham();
         $orm->loaisanpham_id = $request->loaisanpham_id;
@@ -42,7 +60,7 @@ class SanPhamController extends Controller
         $orm->tensanpham_slug = Str::slug($request->tensanpham, '-');
         $orm->soluong = $request->soluong;
         $orm->dongia = $request->dongia;
-        if($request->hasFile('hinhanh')) $orm->hinhanh = $request->hinhanh;
+        $orm->hinhanh = $path ?? null;
         $orm->motasanpham = $request->motasanpham;
         $orm->save();
 
@@ -68,8 +86,25 @@ class SanPhamController extends Controller
             'tensanpham' => ['required', 'string', 'max:255', 'unique:sanpham,tensanpham,' . $id],
             'soluong' => ['required', 'numeric'],
             'dongia' => ['required', 'numeric'],
-            // 'hinhanh' => ['nullable', 'image', 'max:2048'],
+            'hinhanh' => ['nullable', 'image', 'max:2048'],
         ]);
+
+        // Upload hình ảnh
+        $path = null;
+        if($request->hasFile('hinhanh'))
+        {
+            // Xóa tập tin cũ
+            $sp = SanPham::find($id);
+            if(!empty($sp->hinhanh)) Storage::delete($sp->hinhanh);
+
+            // Xác định tên tập tin mới
+            $extension = $request->file('hinhanh')->extension();
+            $filename = Str::slug($request->tensanpham, '-') . '.' . $extension;
+
+            // Upload vào thư mục và trả về đường dẫn
+            $lsp = LoaiSanPham::find($request->loaisanpham_id);
+            $path = Storage::putFileAs($lsp->tenloai_slug, $request->file('hinhanh'), $filename);
+        }
 
         $orm = SanPham::find($id);
         $orm->loaisanpham_id = $request->loaisanpham_id;
@@ -78,7 +113,7 @@ class SanPhamController extends Controller
         $orm->tensanpham_slug = Str::slug($request->tensanpham, '-');
         $orm->soluong = $request->soluong;
         $orm->dongia = $request->dongia;
-        if($request->hasFile('hinhanh')) $orm->hinhanh = $request->hinhanh;
+        $orm->hinhanh = $path ?? $orm->hinhanh ?? null;
         $orm->motasanpham = $request->motasanpham;
         $orm->save();
 
@@ -90,6 +125,9 @@ class SanPhamController extends Controller
     {
         $orm = SanPham::find($id);
         $orm->delete();
+
+        // Xóa tập tin khi xóa sản phẩm
+        if(!empty($orm->hinhanh)) Storage::delete($orm->hinhanh);
 
         // Sau khi xóa thành công thì tự động chuyển về trang danh sách
         return redirect()->route('sanpham');
