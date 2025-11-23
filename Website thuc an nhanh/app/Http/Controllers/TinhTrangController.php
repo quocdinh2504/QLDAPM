@@ -10,12 +10,12 @@ class TinhTrangController extends Controller
     public function getDanhSach()
     {
         $tinhtrang = TinhTrang::all();
-        return view('tinhtrang.danhsach', compact('tinhtrang'));
+        return view('admin.tinhtrang.danhsach', compact('tinhtrang'));
     }
 
     public function getThem()
     {
-        return view('tinhtrang.them');
+        return view('admin.tinhtrang.them');
     }
 
     public function postThem(Request $request)
@@ -28,13 +28,13 @@ class TinhTrangController extends Controller
         $orm->tinhtrang = $request->tinhtrang;
         $orm->save();
 
-        return redirect()->route('tinhtrang');
+        return redirect()->route('admin.tinhtrang');
     }
 
     public function getSua($id)
     {
         $tinhtrang = TinhTrang::find($id);
-        return view('tinhtrang.sua', compact('tinhtrang'));
+        return view('admin.tinhtrang.sua', compact('tinhtrang'));
     }
 
     public function postSua(Request $request, $id)
@@ -47,13 +47,13 @@ class TinhTrangController extends Controller
         $orm->tinhtrang = $request->tinhtrang;
         $orm->save();
 
-        return redirect()->route('tinhtrang');
+        return redirect()->route('admin.tinhtrang');
     }
 
     public function getXoa($id)
     {
         $orm = TinhTrang::find($id);
         $orm->delete();
-        return redirect()->route('tinhtrang');
+        return redirect()->route('admin.tinhtrang');
     }
 }

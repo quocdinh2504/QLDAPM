@@ -36,7 +36,7 @@ class AdminController extends Controller
         $donhang_moi = DonHang::orderBy('created_at', 'desc')->take(5)->get();
 
         // Trả về View kèm dữ liệu
-        return view('admin_dashboard.dashboard', compact(
+        return view('admin.admin_dashboard.dashboard', compact(
             'tong_sanpham', 
             'tong_khachhang', 
             'tong_donhang', 
