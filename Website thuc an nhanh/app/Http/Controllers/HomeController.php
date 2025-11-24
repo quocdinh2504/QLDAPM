@@ -7,7 +7,10 @@ class HomeController extends Controller
 {
     public function getHome()
     {
-        return view('frontend.home');
+        $loaisanpham = LoaiSanPham::with([
+                    'SanPham' => function($query) { $query->latest()->take(8); }
+                ])->get();
+            return view('frontend.home', compact('loaisanpham'));
     }
 
     public function getSanPham($tenloai_slug = '')
