@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class KhachHangController extends Controller
 {
@@ -14,8 +17,15 @@ class KhachHangController extends Controller
 
     public function getHome()
     {
-        return view('user.home');
+        if(Auth::check())
+        {
+            $user = User::find(Auth::user()->id);
+            return view('user.home', compact('user'));
+        }
+        else
+            return redirect()->route('user.dangnhap');
     }
+
 
     public function getDatHang()
     {
@@ -47,20 +57,44 @@ class KhachHangController extends Controller
 
     public function getHoSo()
     {
-        // Bổ sung code tại đây
-        return view('user.hoso');
+        return redirect()->route('user.home');
     }
 
     public function postHoSo(Request $request)
     {
-        // Bổ sung code tại đây
-        return redirect()->route('user.home');
+        $id = Auth::user()->id;
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
+        ]);
+
+        $orm = User::find($id);
+        $orm->name = $request->name;
+        $orm->username = Str::before($request->email, '@');
+        $orm->email = $request->email;
+        $orm->save();
+
+        return redirect()->route('user.home')->with('success', 'Đã cập nhật thông tin thành công.');
     }
 
     public function postDoiMatKhau(Request $request)
     {
-        // Bổ sung code tại đây
-        return redirect()->route('user.home');
+        $request->validate([
+            'old_password' => ['required', 'string', 'max:255'],
+            'new_password' => ['required', 'string', 'min:8'],
+        ]);
+
+        $user = User::findOrFail(Auth::user()->id ?? 0);
+        if(Hash::check($request->old_password, $user->password))
+        {
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+
+            return redirect()->route('user.home')->with('success', 'Đổi mật khẩu thành công.');
+        }
+        else
+            return redirect()->route('user.home')->with('warning', 'Mật khẩu cũ không chính xác.');
     }
 
     public function postDangXuat(Request $request)
