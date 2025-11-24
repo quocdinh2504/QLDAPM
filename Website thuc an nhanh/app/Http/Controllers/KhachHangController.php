@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\DonHang;
+use App\Models\DonHang_ChiTiet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class KhachHangController extends Controller
 {
@@ -29,18 +32,47 @@ class KhachHangController extends Controller
 
     public function getDatHang()
     {
-        // Bổ sung code tại đây
-        return view('user.dathang');
+        if(Auth::check())
+            return view('user.dathang');
+        else
+            return redirect()->route('user.dangnhap');
     }
 
     public function postDatHang(Request $request)
     {
-        // Bổ sung code tại đây
+        // Kiểm tra
+        $this->validate($request, [
+            'diachigiaohang' => ['required', 'string', 'max:255'],
+            'dienthoaigiaohang' => ['required', 'string', 'max:255'],
+        ]);
+
+        // Lưu vào đơn hàng
+        $dh = new DonHang();
+        $dh->user_id = Auth::user()->id;
+        $dh->tinhtrang_id = 1; // Đơn hàng mới
+        $dh->diachigiaohang = $request->diachigiaohang;
+        $dh->dienthoaigiaohang = $request->dienthoaigiaohang;
+        $dh->save();
+
+        // Lưu vào đơn hàng chi tiết
+        foreach(Cart::content() as $value)
+        {
+            $ct = new DonHang_ChiTiet();
+            $ct->donhang_id = $dh->id;
+            $ct->sanpham_id = $value->id;
+            $ct->soluongban = $value->qty;
+            $ct->dongiaban = $value->price;
+            $ct->save();
+        }
+
         return redirect()->route('user.dathangthanhcong');
     }
 
     public function getDatHangThanhCong()
     {
+        // Xóa giỏ hàng khi hoàn tất đặt hàng?
+        Cart::destroy();
+
         return view('user.dathangthanhcong');
     }
 
