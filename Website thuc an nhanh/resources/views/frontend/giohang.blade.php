@@ -1,9 +1,15 @@
+@extends('layouts.frontend')
+
+@section('title', 'Giỏ hàng')
+
+@section('content')
+
 	<!-- Page content -->
 	<main class="content-wrapper">
 		<nav class="container pt-3 my-3">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-				<li class="breadcrumb-item"><a href="#">Sản phẩm</a></li>
+				<li class="breadcrumb-item"><a href="#">{{ route('frontend.home') }}</a></li>
+				<li class="breadcrumb-item"><a href="#">{{ route('frontend.sanpham') }}</a></li>
 				<li class="breadcrumb-item active">Giỏ hàng</li>
 			</ol>
 		</nav>
@@ -31,149 +37,57 @@
 							</thead>
 							<tbody class="align-middle">
 								<!-- Item -->
-								<tr>
-									<td class="py-3 ps-0">
-										<div class="d-flex align-items-center">
-											<a class="flex-shrink-0" href="#">
-												<img src="assets/img/shop/08.png" width="110" alt="iPhone 14" />
-											</a>
-											<div class="w-100 min-w-0 ps-2 ps-xl-3">
-												<h5 class="d-flex animate-underline mb-2">
-													<a class="d-block fs-sm fw-medium text-truncate animate-target" href="#">Apple iPhone 14 128GB</a>
-												</h5>
-												<ul class="list-unstyled gap-1 fs-xs mb-0">
-													<li class="d-xl-none">
-														<span class="text-body-secondary">Đơn giá:</span>
-														<span class="text-dark-emphasis fw-medium">$899.00</span>
-													</li>
-												</ul>
-												<div class="count-input rounded-2 d-md-none mt-3">
-													<button type="button" class="btn btn-sm btn-icon" data-decrement>
-														<i class="ci-minus"></i>
-													</button>
-													<input type="number" class="form-control form-control-sm" id="qty" name="qty" min="1" value="1" readonly />
-													<button type="button" class="btn btn-sm btn-icon" data-increment>
-														<i class="ci-plus"></i>
-													</button>
+								 @foreach(Cart::content() as $value)
+									<tr>
+										<td class="py-3 ps-0">
+											<div class="d-flex align-items-center">
+												<a class="flex-shrink-0" href="#">
+													<img src="{{ asset('storage/app/private/' . $value->options->image ) }}" width="110" alt="{{ $value->name }}" />
+												</a>
+												<div class="w-100 min-w-0 ps-2 ps-xl-3">
+													<h5 class="d-flex animate-underline mb-2">
+														<a class="d-block fs-sm fw-medium text-truncate animate-target" href="#">{{ $value->name }}</a>
+													</h5>
+													<ul class="list-unstyled gap-1 fs-xs mb-0">
+														<li class="d-xl-none">
+															<span class="text-body-secondary">Đơn giá:</span>
+															<span class="text-dark-emphasis fw-medium">{{ number_format($value->price, 0, ',', '.') }}<small>đ</small></span>
+														</li>
+													</ul>
+													<div class="count-input rounded-2 d-md-none mt-3">
+														<a href="{{ route('frontend.giohang.giam', ['row_id' => $value->rowId]) }}" class="btn btn-sm btn-icon" data-decrement>
+															<i class="ci-minus"></i>
+														</a>
+														<input type="number" class="form-control form-control-sm" id="qty" name="qty" min="1" value="{{ $value->qty }}" readonly />
+														<a href="{{ route('frontend.giohang.tang', ['row_id' => $value->rowId]) }}" class="btn btn-sm btn-icon" data-increment>
+															<i class="ci-plus"></i>
+														</a>
+													</div>
 												</div>
 											</div>
-										</div>
-									</td>
-									<td class="h6 py-3 d-none d-xl-table-cell">$899.00</td>
-									<td class="py-3 d-none d-md-table-cell">
-										<div class="count-input">
-											<button type="button" class="btn btn-icon" data-decrement>
-												<i class="ci-minus"></i>
-											</button>
-											<input type="number" class="form-control" id="qty" name="qty" min="1" value="1" readonly />
-											<button type="button" class="btn btn-icon" data-increment>
-												<i class="ci-plus"></i>
-											</button>
-										</div>
-									</td>
-									<td class="h6 py-3 d-none d-md-table-cell">$899.00</td>
-									<td class="text-end py-3 px-0">
-										<button type="button" class="btn-close fs-sm" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-sm" data-bs-title="Xóa khỏi giỏ"></button>
-									</td>
-								</tr>
-
-								<!-- Item -->
-								<tr>
-									<td class="py-3 ps-0">
-										<div class="d-flex align-items-center">
-											<a class="position-relative flex-shrink-0" href="#">
-												<img src="assets/img/shop/09.png" width="110" alt="iPad Pro" />
-											</a>
-											<div class="w-100 min-w-0 ps-2 ps-xl-3">
-												<h5 class="d-flex animate-underline mb-2">
-													<a class="d-block fs-sm fw-medium text-truncate animate-target" href="#">Tablet Apple iPad Pro M2</a>
-												</h5>
-												<ul class="list-unstyled gap-1 fs-xs mb-0">
-													<li class="d-xl-none">
-														<span class="text-body-secondary">Đơn giá:</span>
-														<span class="text-dark-emphasis fw-medium">$989.00</span>
-													</li>
-												</ul>
-												<div class="count-input rounded-2 d-md-none mt-3">
-													<button type="button" class="btn btn-sm btn-icon" data-decrement>
-														<i class="ci-minus"></i>
-													</button>
-													<input type="number" class="form-control form-control-sm" id="qty" name="qty" min="1" value="1" readonly />
-													<button type="button" class="btn btn-sm btn-icon" data-increment>
-														<i class="ci-plus"></i>
-													</button>
-												</div>
+										</td>
+										<td class="h6 py-3 d-none d-xl-table-cell">{{ number_format($value->price, 0, ',', '.') }}<small>đ</small></td>
+										<td class="py-3 d-none d-md-table-cell">
+											<div class="count-input">
+												<a href="{{ route('frontend.giohang.giam', ['row_id' => $value->rowId]) }}" class="btn btn-icon" data-decrement>
+													<i class="ci-minus"></i>
+												</a>
+												<input type="number" class="form-control" id="qty" name="qty" min="1" value="{{ $value->qty }}" readonly />
+												<a href="{{ route('frontend.giohang.tang', ['row_id' => $value->rowId]) }}" class="btn btn-icon" data-increment>
+													<i class="ci-plus"></i>
+												</a>
 											</div>
-										</div>
-									</td>
-									<td class="h6 py-3 d-none d-xl-table-cell">$989.00</td>
-									<td class="py-3 d-none d-md-table-cell">
-										<div class="count-input">
-											<button type="button" class="btn btn-icon" data-decrement>
-												<i class="ci-minus"></i>
-											</button>
-											<input type="number" class="form-control" id="qty" name="qty" min="1" value="1" readonly />
-											<button type="button" class="btn btn-icon" data-increment>
-												<i class="ci-plus"></i>
-											</button>
-										</div>
-									</td>
-									<td class="h6 py-3 d-none d-md-table-cell">$989.00</td>
-									<td class="text-end py-3 px-0">
-										<button type="button" class="btn-close fs-sm" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-sm" data-bs-title="Xóa khỏi giỏ"></button>
-									</td>
-								</tr>
-
-								<!-- Item -->
-								<tr>
-									<td class="py-3 ps-0">
-										<div class="d-flex align-items-center">
-											<a class="flex-shrink-0" href="#">
-												<img src="assets/img/shop/01.png" width="110" alt="Smart Watch" />
-											</a>
-											<div class="w-100 min-w-0 ps-2 ps-xl-3">
-												<h5 class="d-flex animate-underline mb-2">
-													<a class="d-block fs-sm fw-medium text-truncate animate-target" href="#">Smart Watch Series 7</a>
-												</h5>
-												<ul class="list-unstyled gap-1 fs-xs mb-0">
-													<li class="d-xl-none">
-														<span class="text-body-secondary">Đơn giá:</span>
-														<span class="text-dark-emphasis fw-medium">$429.00</span>
-													</li>
-												</ul>
-												<div class="count-input rounded-2 d-md-none mt-3">
-													<button type="button" class="btn btn-sm btn-icon" data-decrement>
-														<i class="ci-minus"></i>
-													</button>
-													<input type="number" class="form-control form-control-sm" id="qty" name="qty" min="1" value="1" readonly />
-													<button type="button" class="btn btn-sm btn-icon" data-increment>
-														<i class="ci-plus"></i>
-													</button>
-												</div>
-											</div>
-										</div>
-									</td>
-									<td class="h6 py-3 d-none d-xl-table-cell">$429.00</td>
-									<td class="py-3 d-none d-md-table-cell">
-										<div class="count-input">
-											<button type="button" class="btn btn-icon" data-decrement>
-												<i class="ci-minus"></i>
-											</button>
-											<input type="number" class="form-control" id="qty" name="qty" min="1" value="1" readonly />
-											<button type="button" class="btn btn-icon" data-increment>
-												<i class="ci-plus"></i>
-											</button>
-										</div>
-									</td>
-									<td class="h6 py-3 d-none d-md-table-cell">$429.00</td>
-									<td class="text-end py-3 px-0">
-										<button type="button" class="btn-close fs-sm" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-sm" data-bs-title="Xóa khỏi giỏ"></button>
-									</td>
-								</tr>
+										</td>
+										<td class="h6 py-3 d-none d-md-table-cell">{{ number_format($value->price * $value->qty, 0, ',', '.') }}<small>đ</small></td>
+										<td class="text-end py-3 px-0">
+											<a href="{{ route('frontend.giohang.xoa', ['row_id' => $value->rowId]) }}" class="btn-close fs-sm" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-sm" data-bs-title="Xóa khỏi giỏ"></a>
+										</td>
+									</tr>
+								@endforeach
 							</tbody>
 						</table>
 						<div class="nav position-relative z-2 mb-4 mb-lg-0">
-							<a class="nav-link animate-underline px-0" href="#">
+							<a class="nav-link animate-underline px-0" href="{{ route('frontend.home') }}">
 								<i class="ci-chevron-left fs-lg me-1"></i>
 								<span class="animate-target">Tiếp tục mua hàng</span>
 							</a>
@@ -189,16 +103,16 @@
 								<h5 class="border-bottom pb-4 mb-4">Tóm tắt đơn hàng</h5>
 								<ul class="list-unstyled fs-sm gap-3 mb-0">
 									<li class="d-flex justify-content-between">
-										Tổng tiền (3 sản phẩm):
-										<span class="text-dark-emphasis fw-medium">$2,427.00</span>
+										Tổng tiền ({{ Cart::count() ?? 0 }}):
+										<span class="text-dark-emphasis fw-medium">{{ Cart::priceTotal() }}<small>đ</small></span>
 									</li>
 									<li class="d-flex justify-content-between">
 										Giảm giá:
-										<span class="text-danger fw-medium">-$110.00</span>
+										<span class="text-danger fw-medium">{{ Cart::discount() }}<small>đ</small></span>
 									</li>
 									<li class="d-flex justify-content-between">
 										Thuế VAT:
-										<span class="text-dark-emphasis fw-medium">$73.40</span>
+										<span class="text-dark-emphasis fw-medium">{{ Cart::tax() }}<small>đ</small></span>
 									</li>
 									<li class="d-flex justify-content-between">
 										Phí vận chuyển:
@@ -208,9 +122,9 @@
 								<div class="border-top pt-4 mt-4">
 									<div class="d-flex justify-content-between mb-3">
 										<span class="fs-sm">Tổng ước tính:</span>
-										<span class="h5 mb-0">$2,390.40</span>
+										<span class="h5 mb-0">{{ Cart::total() }}<small>đ</small></span>
 									</div>
-									<a class="btn btn-lg btn-primary w-100" href="#">
+									<a class="btn btn-lg btn-primary w-100" href="{{ route('user.dathang') }}">
 										Tiến hành thanh toán
 										<i class="ci-chevron-right fs-lg ms-1 me-n1"></i>
 									</a>
@@ -222,3 +136,4 @@
 			</div>
 		</section>
 	</main>
+@endsection
